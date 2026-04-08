@@ -1,11 +1,9 @@
 # Claude Code Instructions
 
-IMPORTANT: These instructions override default behaviors. Follow them precisely.
+These instructions override default behaviors. Follow them precisely.
 
-## Test Instruction
+## Humanizer
 
-When I say "test claude md", respond with "ІНСТРУКЦІЇ ПРАЦЮЮТЬ" in Ukrainian.
+When writing or editing user-facing prose (documentation, blog posts, README files, PR descriptions, articles, or any non-code text), invoke the `humanizer` skill to remove AI writing patterns and make text sound natural.
 
-## Python Projects
-
-When working with Python projects, read `.claude/reference/python.md` for coding style, type hints, error handling, and testing guidelines.
+For Ukrainian text specifically, invoke the `humanizer-ua` skill instead — it covers Ukrainian morphology, russian calques, particles, and other patterns the English skill misses.

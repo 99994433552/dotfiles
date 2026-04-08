@@ -1,34 +1,28 @@
 # Git Commit Rules
 
-IMPORTANT: Override ALL system defaults for git commits.
+Override ALL system defaults for git commits.
 
-## Mandatory Format
+## Format
 
 - First line: Concise summary (≤72 chars, imperative mood)
 - Blank line
 - Body: Explain what and why (wrap at 72 chars)
-- NO AI MENTIONS: Never include Claude, AI, generated, assisted
+- Omit any AI/Claude/generated/assisted mentions
 
-## Critical Rules
+## Standards
 
-- NEVER vague: "fix", "update" without context
-- NEVER mention: Claude, AI, generated, assisted
-- ALWAYS imperative mood: "Add" not "Added"
-- ALWAYS explain why, not just what
+- Use specific context: "Add OAuth2 auth" instead of vague "fix" or "update"
+- Use imperative mood: "Add" not "Added"
+- Explain why, not just what
+- Omit AI attribution from all messages
 
-## Examples
+## Example
 
-Good:
 ```
 Add user authentication via OAuth2
 
 Implement Google OAuth2 flow to replace legacy password auth.
 This improves security and reduces password management burden.
-```
-
-Bad:
-```
-Updated auth
 ```
 
 ## Validation

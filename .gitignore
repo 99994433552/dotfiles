@@ -1,5 +1,4 @@
 # Claude Code local settings
-.claude/settings.local.json
 .claude/*.local.json
 
 # Temporary files
@@ -9,7 +8,6 @@
 # Backup files
 *.bak
 CHANGELOG.local.md
-.claude/knowledge/
 
 # SketchyBar compiled helpers (rebuild with swiftc)
 config/sketchybar/helpers/calendar_events
@@ -25,8 +23,6 @@ config/nvim/lua/current-theme.lua
 docker-compose/.env
 docker-compose/**/.env
 
-# Claude Code (ignore most, but track config)
+# Claude Code (ignore most, but track rules)
 .claude/*
-!.claude/commands/
-!.claude/reference/
 !.claude/rules/
