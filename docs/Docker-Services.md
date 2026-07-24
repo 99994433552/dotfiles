@@ -11,8 +11,10 @@ Media server services including:
 - **Cloudflare Tunnel** - Secure proxy for exposing services
 
 **Domains:**
-- `navidrome.example.com` → Navidrome (port 4533)
-- `jellyfin.example.com` → Jellyfin (port 8096, running locally via brew)
+- `navidrome.example.com` → Navidrome (container, port 4533)
+- `jellyfin.example.com` → Jellyfin (host, port 8096, running locally via brew)
+- `econumix.example.com` → Econumix (host, port 8501)
+- `spotyist.example.com` → Spotyist (container, port 8000)
 
 ## Setup on New Server
 
@@ -111,15 +113,19 @@ docker compose up -d --force-recreate
 
 ## Cloudflare Tunnel Configuration
 
-The tunnel is configured with token-based authentication, which includes ingress rules managed in Cloudflare dashboard.
+The tunnel runs as the `cloudflared-tunnel` container inside the media stack, started with `tunnel run --token`. Ingress is therefore managed remotely in the Cloudflare dashboard, not in a local file. The host `~/.cloudflared/config.yml` is a leftover from an earlier host-run setup and is not used — the old `homebrew.mxcl.cloudflared` launchd daemon has been removed.
+
+Container services must resolve on `media-network`, so their target is the container name (e.g. `http://navidrome:4533`). Host services use `http://host.docker.internal:<port>`.
 
 **Current ingress rules:**
 - `jellyfin.example.com` → `http://host.docker.internal:8096`
 - `navidrome.example.com` → `http://navidrome:4533`
+- `econumix.example.com` → `http://host.docker.internal:8501`
+- `spotyist.example.com` → `http://spotyist:8000`
 
 To modify ingress rules:
 1. Go to Cloudflare Zero Trust Dashboard
-2. Navigate to: Access > Tunnels > [Your Tunnel] > Public Hostname
+2. Navigate to: Networks > Tunnels > [Your Tunnel] > Public Hostname
 3. Add/edit routes as needed
 
 ## Troubleshooting
