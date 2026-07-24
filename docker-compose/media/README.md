@@ -1,12 +1,13 @@
 # Media Server Docker Compose
 
-Docker Compose stack for media server with Navidrome, qBittorrent, and Cloudflare Tunnel.
+Docker Compose stack for media server with Navidrome, qBittorrent, Spotyist, and Cloudflare Tunnel.
 
 ## Services
 
 - **Navidrome**: Music streaming server
 - **qBittorrent**: Torrent client with web UI
-- **Cloudflare Tunnel**: Secure remote access for Navidrome
+- **Spotyist**: Spotify library cleanup web app (self-hosted, served via the tunnel)
+- **Cloudflare Tunnel**: Secure remote access for Navidrome and Spotyist
 
 ## Quick Start
 
@@ -111,6 +112,25 @@ See `.env.example` for all available variables:
 - `TIMEZONE`: Timezone (e.g., Europe/Kyiv)
 - `QBIT_CONFIG_PATH`: Config storage location
 - `QBIT_DOWNLOADS_PATH`: Downloads directory (should be /Volumes/archive/mediaserver)
+
+### Spotyist
+
+1. Clone the repo on the server and point the build at it:
+   ```bash
+   git clone git@github.com:yevhenii-nepsha/spotyist.git
+   # set SPOTYIST_REPO_PATH in .env to the cloned path
+   ```
+2. Set `SPOTYIST_CLIENT_ID`, `SPOTYIST_SESSION_SECRET` (reuse the existing
+   value so sessions survive), and `SPOTYIST_DOMAIN` in `.env`.
+3. Build and start:
+   ```bash
+   docker compose build spotyist && docker compose up -d spotyist
+   ```
+4. In the Cloudflare Zero Trust dashboard, add a Public Hostname to the
+   tunnel: `spotyist.<domain>` → `http://spotyist:8000`. The container has
+   no published port — the tunnel reaches it over `media-network`.
+5. Ensure the Spotify app has the redirect URI
+   `https://spotyist.<domain>/api/auth/callback`.
 
 ## Security Features
 

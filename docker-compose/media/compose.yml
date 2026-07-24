@@ -55,6 +55,22 @@ services:
       retries: 3
       start_period: 40s
 
+  spotyist:
+    # Spotify library cleanup web app. Built from the cloned repo; the
+    # Cloudflare Tunnel reaches it at http://spotyist:8000 over media-network
+    # (add the public hostname spotyist.<domain> in the Zero Trust dashboard).
+    build:
+      context: ${SPOTYIST_REPO_PATH}
+    image: spotyist:latest
+    container_name: spotyist
+    restart: unless-stopped
+    environment:
+      - SPOTIFY_CLIENT_ID=${SPOTYIST_CLIENT_ID}
+      - SESSION_SECRET=${SPOTYIST_SESSION_SECRET}
+      - BASE_URL=https://spotyist.${SPOTYIST_DOMAIN}
+    networks:
+      - media-network
+
   tunnel:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared-tunnel
