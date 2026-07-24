@@ -147,6 +147,18 @@ update_npm_global_packages() {
     fi
 }
 
+update_agent_skills() {
+    log_step "Updating agent skills"
+
+    local dotfiles_dir="${HOME}/.dotfiles"
+    if [[ -f "$dotfiles_dir/scripts/setup-agent-skills.sh" ]]; then
+        bash "$dotfiles_dir/scripts/setup-agent-skills.sh"
+        log_success "Agent skills updated"
+    else
+        log_warning "setup-agent-skills.sh not found, skipping"
+    fi
+}
+
 cleanup_system() {
     log_step "System cleanup"
 
@@ -192,6 +204,7 @@ print_summary() {
     echo "• Dotfiles configuration"
     echo "• Rust toolchain and tools"
     echo "• npm global packages"
+    echo "• Agent skills"
     echo "• System cleanup"
     echo
     echo -e "${YELLOW}Recommended next steps:${NC}"
@@ -212,6 +225,7 @@ main() {
     update_dotfiles || log_error "Dotfiles update failed"
     update_rust_tools || log_warning "Rust tools update had issues"
     update_npm_global_packages || log_warning "npm update had issues"
+    update_agent_skills || log_warning "Agent skills update had issues"
     cleanup_system || log_warning "System cleanup had issues"
 
     # Always run health check at the end
@@ -238,6 +252,9 @@ if [[ $# -gt 0 ]]; then
         "npm")
             update_npm_global_packages
             ;;
+        "skills")
+            update_agent_skills
+            ;;
         "cleanup")
             cleanup_system
             ;;
@@ -245,7 +262,7 @@ if [[ $# -gt 0 ]]; then
             run_health_check
             ;;
         *)
-            echo "Usage: $0 [homebrew|neovim|dotfiles|rust|npm|cleanup|health]"
+            echo "Usage: $0 [homebrew|neovim|dotfiles|rust|npm|skills|cleanup|health]"
             echo "  Run without arguments to update everything"
             exit 1
             ;;

@@ -138,6 +138,12 @@
       stdout: true
       stderr: true
 
+    # === Agent Skills Setup ===
+    - description: "Installing/updating agent skills (humanizer)"
+      command: ./scripts/setup-agent-skills.sh
+      stdout: true
+      stderr: true
+
     # === Script Permissions ===
     - description: "Setting executable permissions for maintenance scripts"
       command: |
