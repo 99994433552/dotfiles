@@ -126,12 +126,6 @@
       stdout: true
       stderr: true
 
-    # === Tmux Plugins Setup ===
-    - description: "Setting up tmux plugins (TPM, resurrect, continuum)"
-      command: ./scripts/setup-tmux-plugins.sh
-      stdout: true
-      stderr: true
-
     # === Nerd Fonts Setup ===
     - description: "Installing Nerd Fonts via getnf"
       command: python3 ./scripts/setup-nerd-fonts.py
