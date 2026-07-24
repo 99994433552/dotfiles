@@ -47,7 +47,7 @@ TUNNEL_TOKEN=your_actual_token_here
 
 **How to get tunnel token:**
 1. Go to [Cloudflare Zero Trust Dashboard](https://one.dash.cloudflare.com/)
-2. Navigate to: Access > Tunnels > [Your Tunnel]
+2. Navigate to: Networks > Tunnels & Mesh > [Your Tunnel]
 3. Click "Configure" > Copy the token from the install command
 
 ### 4. Configure Navidrome paths
@@ -123,10 +123,14 @@ Container services must resolve on `media-network`, so their target is the conta
 - `econumix.example.com` → `http://host.docker.internal:8501`
 - `spotyist.example.com` → `http://spotyist:8000`
 
-To modify ingress rules:
+To add or edit a route:
 1. Go to Cloudflare Zero Trust Dashboard
-2. Navigate to: Networks > Tunnels > [Your Tunnel] > Public Hostname
-3. Add/edit routes as needed
+2. Navigate to: Networks > Tunnels & Mesh > Published application routes > Add
+3. Fill in the route, e.g. for Spotyist:
+   - **Subdomain:** `spotyist`
+   - **Domain:** `example.com`
+   - **Type:** `HTTP`
+   - **URL:** `spotyist:8000` (container name, since it resolves on `media-network`)
 
 ## Troubleshooting
 
