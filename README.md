@@ -1,106 +1,75 @@
 # Dotfiles
 
-Personal dotfiles for macOS with support for multiple machine profiles.
+macOS dotfiles managed with [dotbot](https://github.com/anishathalye/dotbot). Two machine profiles: `local` (desktop/laptop) and `server` (Mac Mini).
 
-## Quick Start
+## Set up a new machine
 
 ```bash
-# Clone dotfiles
-git clone <your-repo-url> ~/.dotfiles
+git clone <repo-url> ~/.dotfiles
 cd ~/.dotfiles
-
-# Set profile (optional, defaults to 'local')
-echo "local" > ~/.dotfiles-profile   # For desktop/laptop
-# or
-echo "server" > ~/.dotfiles-profile  # For Mac Mini server
-
-# Install (automatically installs Homebrew and all packages)
+echo local > ~/.dotfiles-profile   # or: echo server
 ./install
 ```
 
-## Documentation
-
-**Full documentation is available in [`docs/`](docs/Home.md)**
-
-### Quick Links
-
-- **[Setup Guide](docs/Setup-Guide.md)** - Complete installation and configuration guide
-- **[Neovim](docs/Neovim.md)** - Neovim configuration and keybindings
-- **[Tmux](docs/Tmux.md)** - Tmux setup and session management
-- **[Docker Services](docs/Docker-Services.md)** - Server services (Navidrome, Cloudflare Tunnel)
-- **[Git Workflow](docs/Git-Workflow.md)** - Commit standards and git hooks
-- **[Scripts Reference](docs/Scripts-Reference.md)** - Utility scripts documentation
-- **[Troubleshooting](docs/Troubleshooting.md)** - Common issues and solutions
-
-## Features
-
-### Multi-Profile System
-
-Support for different machine types:
-- **base** - Core CLI tools (all machines)
-- **local** - Desktop/laptop with GUI apps and development tools
-- **server** - Mac Mini with minimal GUI and server-specific tools
+`./install` installs Homebrew if it is missing, installs the profile's packages, symlinks the configs, and sets up tmux plugins, Nerd Fonts, and agent skills. To preview the actions without changing anything:
 
 ```bash
-# Manage profiles
-./bin/dotfiles-profile show          # Current profile
-./bin/dotfiles-profile set local     # Set profile
-./bin/brew-diff                      # Compare profiles
+./install --dry-run
 ```
 
-### Included Tools
+## Update an existing machine
 
-**CLI Tools:**
-- Shell: zsh with starship prompt
-- Editor: neovim with LSP, treesitter, autocompletion
-- Terminal: tmux with session persistence
-- Modern CLI: eza, bat, ripgrep, fd, fzf, zoxide
-- Git: lazygit, gh, git-delta
-- Development: Podman (Docker alternative), Claude Code CLI
+```bash
+./scripts/update-all.sh            # update everything
+```
 
-**Server Services:**
-- Navidrome (music streaming)
-- Cloudflare Tunnel (secure proxy)
-- Jellyfin (media server)
+Update one area at a time:
 
-See [Setup Guide](docs/Setup-Guide.md) for complete package lists.
+```bash
+./scripts/update-all.sh homebrew   # brew update, upgrade, bundle
+./scripts/update-all.sh neovim     # Lazy.nvim, Treesitter, Mason
+./scripts/update-all.sh dotfiles   # git pull + dotbot relink
+./scripts/update-all.sh rust       # rustup + cargo tools
+./scripts/update-all.sh npm        # global npm packages
+./scripts/update-all.sh skills     # agent skills (humanizer)
+./scripts/update-all.sh cleanup    # caches + brew cleanup
+./scripts/update-all.sh health     # health check only
+```
+
+## Manage profiles and packages
+
+```bash
+./bin/dotfiles-profile show        # current profile
+./bin/dotfiles-profile set local   # switch profile (local | server)
+./bin/brew-diff local server       # compare two profiles' package lists
+```
+
+Package lists live in `profiles/base.Brewfile` (all machines) plus `profiles/local.Brewfile` and `profiles/server.Brewfile`. Edit those, not the root `Brewfile`, which is generated. Then apply:
+
+```bash
+./install                          # regenerates Brewfile and runs brew bundle
+brew bundle cleanup --force        # remove packages no longer listed
+```
 
 ## Maintenance
 
 ```bash
-# Update everything
-./scripts/update-all.sh
-
-# Run health check
-./scripts/health-check.sh
-
-# Create backup
-./scripts/backup.sh
-
-# Clean up packages not in Brewfile
-brew bundle cleanup --force
+./scripts/health-check.sh          # check symlinks, shell syntax, git, brew, nvim, tools
+./scripts/backup.sh                # back up the current dotfiles state
 ```
 
-## Structure
+## Layout
 
 ```
-.dotfiles/
-├── config/          # Application configurations
-│   ├── nvim/       # Neovim
-│   ├── tmux/       # Tmux
-│   ├── kitty/      # Kitty terminal
-│   └── ...
-├── profiles/        # Brewfile profiles
-│   ├── base.Brewfile
-│   ├── local.Brewfile
-│   └── server.Brewfile
-├── docker-compose/  # Docker service configs
-├── scripts/         # Maintenance scripts
-├── bin/             # User executables
-├── docs/            # Documentation
-└── CLAUDE.md        # Claude Code instructions
+config/          app configs (nvim, tmux, kitty, yazi, …), linked into ~/.config
+profiles/        Brewfile sources: base + local/server
+scripts/         install, update, and maintenance scripts
+bin/             profile and brew helpers
+git-hooks/       commit-msg + pre-commit, linked into ~/.git-hooks
+docker-compose/  server media stack (server profile only)
+docs/            detailed guides
 ```
 
-## License
+## Docs
 
-Personal dotfiles - feel free to fork and adapt for your own use.
+Deeper guides are in [`docs/`](docs/Home.md): [Setup](docs/Setup-Guide.md), [Neovim](docs/Neovim.md), [Tmux](docs/Tmux.md), [Docker Services](docs/Docker-Services.md), [Git Workflow](docs/Git-Workflow.md), [Scripts](docs/Scripts-Reference.md), [Troubleshooting](docs/Troubleshooting.md).
