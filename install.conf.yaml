@@ -60,8 +60,6 @@
 
     # Claude Code personal instructions
     ~/.claude/CLAUDE.md: CLAUDE.md
-    ~/.claude/commands: .claude/commands
-    ~/.claude/reference: .claude/reference
     ~/.claude/rules: .claude/rules
 
 # ============================================================================
