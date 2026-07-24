@@ -11,13 +11,13 @@
     link:
       relink: true
       create: true
+      backup: true
 
 # ============================================================================
 # CLEANUP - Remove broken symlinks
 # ============================================================================
 - clean:
     ~/:
-      force: true
     ~/.config:
       recursive: true
 
@@ -88,20 +88,16 @@
     # === OpenCode ===
     ~/.config/opencode/opencode.json:
       path: config/opencode/opencode.json
-      create: true
 
     # === Terminal Multiplexers ===
     ~/.config/zellij/config.kdl:
       path: config/zellij/config.kdl
-      create: true
 
     ~/.config/tmux/tmux.conf:
       path: config/tmux/tmux.conf
-      create: true
 
     ~/.config/musikcube/hotkeys.json:
       path: config/musikcube/hotkeys.json
-      create: true
 
 # ============================================================================
 # SYMLINKS - Docker Compose (server profile only)
