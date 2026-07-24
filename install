@@ -27,7 +27,7 @@ if ! command -v dotbot &> /dev/null; then
 fi
 
 # Run dotbot (handles symlinks, Homebrew updates, tmux plugins, health check)
-dotbot -c "$DOTFILES_DIR/install.conf.yaml"
+dotbot -c "$DOTFILES_DIR/install.conf.yaml" "$@"
 
 echo ""
 echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
