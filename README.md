@@ -11,11 +11,21 @@ echo local > ~/.dotfiles-profile   # or: echo server
 ./install
 ```
 
-`./install` installs Homebrew if it is missing, installs the profile's packages, symlinks the configs, and sets up tmux plugins, Nerd Fonts, and agent skills. To preview the actions without changing anything:
+`./install` installs Homebrew if it is missing, installs the profile's packages, symlinks the configs, and sets up Nerd Fonts and agent skills. To preview the actions without changing anything:
 
 ```bash
 ./install --dry-run
 ```
+
+### Firefox profile
+
+`./install` installs Firefox but leaves its profile alone. Launch Firefox once so a profile exists, then link the tracked config:
+
+```bash
+./setup_firefox.zsh                # pick a profile, links user.js + chrome/
+```
+
+The repo tracks config only: settings (`user.js`), UI styling (`chrome/userChrome.css`), and container and handler definitions. Profile data stays out of git. Bookmarks, history, saved logins, cookies, and extensions never get committed, so bring them over with a Firefox account and Sync.
 
 ## Update an existing machine
 
@@ -48,8 +58,15 @@ Package lists live in `profiles/base.Brewfile` (all machines) plus `profiles/loc
 
 ```bash
 ./install                          # regenerates Brewfile and runs brew bundle
-brew bundle cleanup --force        # remove packages no longer listed
 ```
+
+To drop a package, delete its line from the profile and uninstall it directly:
+
+```bash
+brew uninstall <formula>           # or: brew uninstall --cask <cask>
+```
+
+Don't run `brew bundle cleanup --force` here. The profiles don't list manually-installed apps or the Nerd Fonts from `setup-nerd-fonts.py`, so cleanup treats them as stray and removes them too.
 
 ## Maintenance
 
@@ -61,7 +78,7 @@ brew bundle cleanup --force        # remove packages no longer listed
 ## Layout
 
 ```
-config/          app configs (nvim, tmux, kitty, yazi, …), linked into ~/.config
+config/          app configs (nvim, kitty, zellij, bat, …), linked into ~/.config
 profiles/        Brewfile sources: base + local/server
 scripts/         install, update, and maintenance scripts
 bin/             profile and brew helpers
