@@ -12,11 +12,13 @@ Describe '_confirm'
     Data ''
     When call _confirm 'Continue?'
     The status should be failure
+    The output should include 'Continue?'
   End
 
   It 'returns failure on n'
     Data 'n'
     When call _confirm 'Continue?'
     The status should be failure
+    The output should include 'Continue?'
   End
 End
