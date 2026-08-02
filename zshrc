@@ -109,6 +109,12 @@ compdef _uv_run_mod uv
 # Utility Functions
 # ============================================================================
 
+# Load modular functions and their shared helpers (lib first, then functions)
+for _zf in "$DOTFILES_DIR"/config/zsh/lib/*.zsh(N) "$DOTFILES_DIR"/config/zsh/functions/*.zsh(N); do
+  source "$_zf"
+done
+unset _zf
+
 # Smart nvim launcher
 unalias v 2>/dev/null || true
 v() {
