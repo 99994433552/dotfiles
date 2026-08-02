@@ -105,6 +105,10 @@ docker-compose/  server media stack (server profile only)
 docs/            detailed guides
 ```
 
+## Shell functions
+
+Utility functions live in `config/zsh/functions/` (`nav.zsh`, `files.zsh`, `media.zsh`), backed by shared helpers in `config/zsh/lib/` (`confirm.zsh`, `auth-args.zsh`, `preview.zsh`, `media-helpers.zsh`). Tests live in `config/zsh/spec/` and run with `shellspec`. `zshrc` sources these modules automatically at startup.
+
 ## Docs
 
 Deeper guides are in [`docs/`](docs/Home.md): [Setup](docs/Setup-Guide.md), [Neovim](docs/Neovim.md), [Tmux](docs/Tmux.md), [Docker Services](docs/Docker-Services.md), [Git Workflow](docs/Git-Workflow.md), [Scripts](docs/Scripts-Reference.md), [Troubleshooting](docs/Troubleshooting.md).
