@@ -27,3 +27,8 @@ docker-compose/**/.env
 .claude/*
 !.claude/rules/
 !.claude/settings.json
+
+# Brainstorming specs live alongside plans under docs/superpowers/
+# (global gitignore excludes any dir named specs/)
+!docs/superpowers/specs
+!docs/superpowers/specs/**
