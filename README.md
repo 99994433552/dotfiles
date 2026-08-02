@@ -68,6 +68,23 @@ brew uninstall <formula>           # or: brew uninstall --cask <cask>
 
 Don't run `brew bundle cleanup --force` here. The profiles don't list manually-installed apps or the Nerd Fonts from `setup-nerd-fonts.py`, so cleanup treats them as stray and removes them too.
 
+## Claude Code config
+
+Agent config lives in `.claude/` and is symlinked into `~/.claude/`. The repo tracks the parts that work on any machine and leaves machine-specific bits local.
+
+The repo tracks:
+
+- `CLAUDE.md` — global instructions, kept lean since they load every session
+- `.claude/rules/` — topic rules; `git.md` always loads, `python.md` is path-scoped to `**/*.py` and loads only when you open a Python file
+- `.claude/settings.json` — permissions, enabled plugins, statusline; no hardcoded home paths
+
+These stay local and never get committed:
+
+- `~/.claude/settings.local.json` — rules that need an absolute home path, such as the dotfiles push allow
+- `~/.claude/statusline-command.sh` — the statusline script
+
+Keep `settings.json` free of your username. `.gitignore` tracks it as an exception to `.claude/*`, and the pre-commit hook rejects any commit that contains a home path. Bash permission rules match literally with no `~` expansion, so home-relative rules belong in `settings.local.json`; statusline paths do expand `~`, so use it there.
+
 ## Maintenance
 
 ```bash
@@ -79,6 +96,7 @@ Don't run `brew bundle cleanup --force` here. The profiles don't list manually-i
 
 ```
 config/          app configs (nvim, kitty, zellij, bat, …), linked into ~/.config
+.claude/         Claude Code config (CLAUDE.md, rules, settings), linked into ~/.claude
 profiles/        Brewfile sources: base + local/server
 scripts/         install, update, and maintenance scripts
 bin/             profile and brew helpers
