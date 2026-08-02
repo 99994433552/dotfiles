@@ -20,6 +20,7 @@ brew "tree-sitter"                   # Parser generator for syntax highlighting
 brew "zellij"                        # Modern terminal multiplexer (Rust)
 brew "gh"                            # GitHub CLI tool
 brew "dotbot"                        # Dotfiles bootstrapper (manages symlinks)
+brew "shellspec"                     # BDD test framework for shell (zsh mode)
 
 # ============================================================================
 # PYTHON DEVELOPMENT

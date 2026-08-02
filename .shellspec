@@ -1,0 +1,4 @@
+--shell zsh
+--default-path config/zsh/spec
+--helperdir config/zsh/spec
+--require spec_helper
