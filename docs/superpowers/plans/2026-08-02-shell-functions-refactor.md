@@ -15,7 +15,7 @@
 - Functions are **sourced directly from `$DOTFILES_DIR`** (exported at `zshrc:10`). No dotbot symlink for `config/zsh`.
 - Shared helpers are prefixed with `_` and live in `config/zsh/lib/`.
 - shellspec spec files live in `config/zsh/spec/*_spec.sh`; project config is `.shellspec` at repo root with `--shell zsh`.
-- Non-trivial functions open with `setopt local_options no_unset pipe_fail err_return`, **except** functions whose body contains an interactive `read` loop, where `err_return` fights the loop — those keep explicit `return` checks.
+- Non-trivial functions open with `setopt local_options pipe_fail`. Add `no_unset` **only** when the function makes no bare positional-parameter reference for a graceful no-arg path (e.g. `unlockdir`, which guards with `${1:-.}`) — `no_unset` aborts on `$1`/`$2` when unset and swallows the `Usage` messages of the arg-parsing functions (`ytmp3`, `vidcut`, `storycut`, `makesticker`), so they omit it. Never add `err_return` to functions whose body contains an interactive `read` loop — it fights the loop; those keep explicit `return` checks. (Pre-flight ruling 2026-08-02, verified empirically.)
 - Commit messages: summary ≤72 chars, imperative, specific first word (not fix/update/change); blank line; body explaining why. No AI attribution (the `commit-msg` hook rejects `claude|generated|assisted|copilot` and 🤖).
 - Never delete an original function until its replacement is sourced and verified working.
 
@@ -758,7 +758,7 @@ skvotdl() { dlref "$1" "https://lms.skvot.io/"; }
 ```
 
 Move `ytmp3` with these exact edits:
-- Add `setopt local_options no_unset pipe_fail` as the first body line (no `err_return`: the option loop and `read` need explicit control).
+- Add `setopt local_options pipe_fail` as the first body line (no `no_unset` — its `while [[ "$1" == -* ]]` option loop reads a bare `$1`; no `err_return` — the option loop and `read` need explicit control).
 - Replace its channel-name extraction:
   ```zsh
   local dirname
@@ -860,7 +860,7 @@ Expected: FAIL — `vidcut`/`storycut` not defined in media.zsh yet.
 
 Move `vidcut`, `storycut`, `makesticker` into `config/zsh/functions/media.zsh`, applying:
 
-- All three: add `setopt local_options no_unset pipe_fail` as the first body line. Do **not** add `err_return` — each parses options in a `while` loop and `makesticker` inspects `$?` after each ffmpeg pass explicitly.
+- All three: add `setopt local_options pipe_fail` as the first body line. Do **not** add `no_unset` — `makesticker` starts with `local input="$1"` and `vidcut`/`storycut` reference `$2` in their option loops, all of which `no_unset` would abort before the `Usage`/validation messages. Do **not** add `err_return` — each parses options in a `while` loop and `makesticker` inspects `$?` after each ffmpeg pass explicitly.
 - `vidcut` and `storycut`: replace the auth `case` block:
   ```zsh
   local -a auth_args=()

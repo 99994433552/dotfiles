@@ -91,14 +91,26 @@ Helpers live in `lib/` and are sourced before the functions that call them.
 Every non-trivial function opens with:
 
 ```zsh
-setopt local_options no_unset pipe_fail err_return
+setopt local_options pipe_fail
 ```
 
-`local_options` scopes the change to the function; `no_unset` turns unset-var
-bugs into errors; `pipe_fail` propagates failures through pipes; `err_return`
-makes the function return on the first failed command. This converts today's
-silent failures into loud, early exits. Interactive-read functions keep their
-existing explicit control flow where `err_return` would fight the `read` loop.
+`local_options` scopes the change to the function; `pipe_fail` propagates
+failures through pipes so a broken step in a pipeline is no longer masked.
+
+Two options are applied conditionally rather than blanket:
+
+- `no_unset` (abort on unset variable) is added **only** to functions with no
+  bare positional-parameter reference on a graceful no-arg path. It aborts on
+  `$1`/`$2` when unset, which would swallow the `Usage` messages of the
+  arg-parsing functions (`ytmp3`, `vidcut`, `storycut`, `makesticker`), so those
+  omit it. `unlockdir` guards with `${1:-.}` and keeps it. (Verified
+  empirically; pre-flight ruling 2026-08-02.)
+- `err_return` (return on first failed command) is never added to functions
+  with an interactive `read` loop — it fights the loop; those keep explicit
+  `return` checks.
+
+This converts today's silent failures into loud, early exits without breaking
+the CLI-style functions' no-argument ergonomics.
 
 ## Pure helpers and tests
 
