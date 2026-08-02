@@ -12,3 +12,21 @@ Describe 'file functions'
     The path "$SHELLSPEC_TMPBASE/cm/junk.log" should be exist
   End
 End
+
+Describe 'download functions'
+  Include config/zsh/lib/auth-args.zsh
+  Include config/zsh/lib/media-helpers.zsh
+  Include config/zsh/functions/media.zsh
+
+  It 'dlref errors without a url'
+    When call dlref
+    The status should be failure
+    The output should include 'Usage'
+  End
+
+  It 'ytmp3 errors without a url'
+    When call ytmp3
+    The status should be failure
+    The output should include 'Usage'
+  End
+End
