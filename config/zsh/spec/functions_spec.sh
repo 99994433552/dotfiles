@@ -30,3 +30,27 @@ Describe 'download functions'
     The output should include 'Usage'
   End
 End
+
+Describe 'cutting functions'
+  Include config/zsh/lib/auth-args.zsh
+  Include config/zsh/lib/media-helpers.zsh
+  Include config/zsh/functions/media.zsh
+
+  It 'vidcut errors when required args are missing'
+    When call vidcut -u https://example.com/x
+    The status should be failure
+    The output should include 'Required arguments missing'
+  End
+
+  It 'vidcut -h prints usage and succeeds'
+    When call vidcut -h
+    The status should be success
+    The output should include 'Usage: vidcut'
+  End
+
+  It 'storycut errors when required args are missing'
+    When call storycut -u https://example.com/x
+    The status should be failure
+    The output should include 'Required arguments missing'
+  End
+End
