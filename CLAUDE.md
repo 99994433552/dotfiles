@@ -1,9 +1,12 @@
-# Claude Code Instructions
+# Global Claude instructions
 
-These instructions override default behaviors. Follow them precisely.
+## Communication
+- Code comments and documentation in English (responses are Ukrainian per settings).
 
 ## Humanizer
+- Writing or editing user-facing prose (docs, blog, README, PR text, articles)?
+  Invoke the `humanizer` skill. For Ukrainian prose invoke `humanizer-ua` — it
+  catches morphology, russian calques, and particles the English skill misses.
 
-When writing or editing user-facing prose (documentation, blog posts, README files, PR descriptions, articles, or any non-code text), invoke the `humanizer` skill to remove AI writing patterns and make text sound natural.
-
-For Ukrainian text specifically, invoke the `humanizer-ua` skill instead — it covers Ukrainian morphology, russian calques, particles, and other patterns the English skill misses.
+## Clarify before assuming
+- On ambiguous or multi-approach tasks, ask before guessing; never fabricate requirements.
