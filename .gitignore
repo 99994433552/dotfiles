@@ -23,6 +23,7 @@ config/nvim/lua/current-theme.lua
 docker-compose/.env
 docker-compose/**/.env
 
-# Claude Code (ignore most, but track rules)
+# Claude Code (ignore most, but track rules + shared settings)
 .claude/*
 !.claude/rules/
+!.claude/settings.json

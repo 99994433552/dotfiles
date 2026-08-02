@@ -1,0 +1,59 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs cat:*)",
+      "Bash(find:*)",
+      "Bash(git log:*)",
+      "Bash(brew list:*)",
+      "Bash(brew tap:*)",
+      "Bash(brew uninstall:*)",
+      "Bash(plutil:*)",
+      "Bash(python3:*)",
+      "Bash(/usr/bin/zip:*)",
+      "Bash(claude mcp:*)",
+      "Bash(claude mcp tools:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:opensubsonic.netlify.app)",
+      "WebSearch",
+      "mcp__context7__query-docs",
+      "mcp__github__search_code",
+      "mcp__mcp-obsidian__obsidian_list_files_in_dir",
+      "mcp__mcp-obsidian__obsidian_batch_get_file_contents",
+      "mcp__mcp-obsidian__obsidian_get_file_contents"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)"
+    ],
+    "ask": [],
+    "defaultMode": "plan"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "/bin/bash ~/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "pyright-lsp@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true
+  },
+  "outputStyle": "Explanatory",
+  "language": "Ukrainian",
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
+  "autoUpdatesChannel": "stable",
+  "tui": "fullscreen",
+  "prefersReducedMotion": true,
+  "autoDreamEnabled": true,
+  "preferredNotifChannel": "kitty",
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": true
+}
