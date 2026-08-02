@@ -6,6 +6,6 @@ _parse_auth() {
   case "$method" in
     browser) auth_args=(--cookies-from-browser "$browser") ;;
     file)    auth_args=(--cookies "$cookies_file") ;;
-    oauth)   auth_args=(--username oauth --password) ;;
+    oauth)   auth_args=(--username oauth --password '') ;;
   esac
 }
