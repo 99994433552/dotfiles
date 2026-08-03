@@ -42,7 +42,28 @@ cmd_sync() {
   git -C "$DOTFILES" --no-pager diff --stat -- .claude/skills || true
 }
 
+check_one() {
+  local name="$1" repo ref url head_sha latest_tag
+  repo=$(jq -r --arg n "$name" '.vendored[$n].repo' "$MANIFEST")
+  ref=$(jq  -r --arg n "$name" '.vendored[$n].ref'  "$MANIFEST")
+  url="https://github.com/$repo"
+  head_sha=$(git ls-remote "$url" HEAD | awk '{print $1}')
+  latest_tag=$(git ls-remote --tags --sort=-v:refname "$url" \
+                 | awk -F/ '{print $NF}' | grep -v '\^{}' | head -1 || true)
+  if [ "$ref" = "$head_sha" ] || { [ -n "$latest_tag" ] && [ "$ref" = "$latest_tag" ]; }; then
+    ok "$name up to date (pinned $ref)"
+  else
+    warn "$name: pinned $ref → upstream HEAD ${head_sha:0:12}${latest_tag:+, latest tag $latest_tag}"
+  fi
+}
+
+cmd_check() {
+  local names; names=$(jq -r '.vendored | keys[]' "$MANIFEST")
+  for name in $names; do check_one "$name"; done
+}
+
 case "${1:-sync}" in
-  sync) cmd_sync ;;
-  *)    echo "usage: sync-skills.sh [sync|--check|bootstrap]" >&2; exit 2 ;;
+  sync)    cmd_sync ;;
+  --check) cmd_check ;;
+  *)       echo "usage: sync-skills.sh [sync|--check|bootstrap]" >&2; exit 2 ;;
 esac
