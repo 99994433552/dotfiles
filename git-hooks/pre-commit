@@ -171,8 +171,19 @@ done
 # Python Code Quality (ruff)
 # =============================================================================
 
-# Get staged Python files
-python_files=$(echo "$staged_files" | grep '\.py$' || true)
+# Get staged Python files.
+# - Honor the same exclusion list the security scan uses (should_exclude),
+#   so the ruff block can no longer format files the scanner skips.
+# - Skip vendored third-party skills under .claude/skills/: they are pinned
+#   pristine snapshots and must never be reformatted. Secret scanning above
+#   still covers them.
+python_files=""
+for _pf in $(echo "$staged_files" | grep '\.py$' || true); do
+    should_exclude "$_pf" && continue
+    [[ "$_pf" == .claude/skills/* ]] && continue
+    python_files+="${_pf}"$'\n'
+done
+python_files=$(printf '%s' "$python_files" | grep -v '^$' || true)
 
 if [[ -n "$python_files" ]]; then
     echo ""
