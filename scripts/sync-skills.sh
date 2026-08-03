@@ -64,8 +64,36 @@ cmd_check() {
   for name in $names; do check_one "$name"; done
 }
 
+SETTINGS="$DOTFILES/.claude/settings.json"
+
+cmd_bootstrap() {
+  command -v claude >/dev/null || { warn "claude CLI missing; skipping plugin bootstrap"; return 0; }
+
+  # Ensure the Astral marketplace is present (idempotent).
+  if ! claude plugin marketplace list 2>/dev/null | grep -q 'astral-sh/claude-code-plugins'; then
+    log "Adding Astral marketplace"
+    claude plugin marketplace add astral-sh/claude-code-plugins || warn "could not add Astral marketplace"
+  fi
+
+  # Install any enabled-but-not-installed plugin.
+  local installed; installed=$(claude plugin list 2>/dev/null || true)
+  while IFS= read -r plugin; do
+    [ -n "$plugin" ] || continue
+    if ! grep -qF "$plugin" <<<"$installed"; then
+      log "Installing plugin $plugin"
+      claude plugin install "$plugin" || warn "could not install $plugin"
+    fi
+  done < <(jq -r '.enabledPlugins | keys[]' "$SETTINGS")
+
+  # Warn on missing formatter/runtime tools (never fatal).
+  for tool in ruff rustfmt uvx; do
+    command -v "$tool" >/dev/null && ok "$tool present" || warn "$tool NOT found (needed by hooks/plugins)"
+  done
+}
+
 case "${1:-sync}" in
-  sync)    cmd_sync ;;
-  --check) cmd_check ;;
-  *)       echo "usage: sync-skills.sh [sync|--check|bootstrap]" >&2; exit 2 ;;
+  sync)      cmd_sync ;;
+  --check)   cmd_check ;;
+  bootstrap) cmd_bootstrap ;;
+  *)         echo "usage: sync-skills.sh [sync|--check|bootstrap]" >&2; exit 2 ;;
 esac
