@@ -1,0 +1,7 @@
+# skill-creator eval/benchmark artifacts
+evals/
+benchmark.json
+# transient caches
+*.cache
+__pycache__/
+.DS_Store

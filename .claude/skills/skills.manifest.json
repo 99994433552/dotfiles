@@ -1,0 +1,15 @@
+{
+  "vendored": {
+    "humanizer": {
+      "repo": "blader/humanizer",
+      "ref": "v2.9.1",
+      "subdir": "."
+    },
+    "rust-skills": {
+      "repo": "leonardomso/rust-skills",
+      "ref": "fd2a861ab0406a4ac536a55274d14ea6fd1ca9c9",
+      "subdir": "."
+    }
+  },
+  "owned": ["humanizer-ua", "rust-explain-errors"]
+}
