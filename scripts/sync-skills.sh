@@ -76,10 +76,10 @@ cmd_bootstrap() {
   fi
 
   # Install any enabled-but-not-installed plugin.
-  local installed; installed=$(claude plugin list 2>/dev/null || true)
+  local installed; installed=$(claude plugin list 2>/dev/null | grep -oE '[^[:space:]]+@[^[:space:]]+' || true)
   while IFS= read -r plugin; do
     [ -n "$plugin" ] || continue
-    if ! grep -qF "$plugin" <<<"$installed"; then
+    if ! grep -qxF "$plugin" <<<"$installed"; then
       log "Installing plugin $plugin"
       claude plugin install "$plugin" || warn "could not install $plugin"
     fi
