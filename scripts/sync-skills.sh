@@ -49,7 +49,9 @@ check_one() {
   url="https://github.com/$repo"
   head_sha=$(git ls-remote "$url" HEAD | awk '{print $1}')
   latest_tag=$(git ls-remote --tags --sort=-v:refname "$url" \
-                 | awk -F/ '{print $NF}' | grep -v '\^{}' | head -1 || true)
+                 | awk -F/ '{print $NF}' \
+                 | { grep -v '\^{}' || true; } \
+                 | head -1)
   if [ "$ref" = "$head_sha" ] || { [ -n "$latest_tag" ] && [ "$ref" = "$latest_tag" ]; }; then
     ok "$name up to date (pinned $ref)"
   else
