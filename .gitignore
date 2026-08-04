@@ -29,6 +29,7 @@ docker-compose/**/.env
 !.claude/settings.json
 !.claude/skills/
 !.claude/hooks/
+!.claude/SKILLS.md
 
 # Brainstorming specs live alongside plans under docs/superpowers/
 # (global gitignore excludes any dir named specs/)

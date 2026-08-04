@@ -151,11 +151,13 @@ update_agent_skills() {
     log_step "Updating agent skills"
 
     local dotfiles_dir="${HOME}/.dotfiles"
-    if [[ -f "$dotfiles_dir/scripts/setup-agent-skills.sh" ]]; then
-        bash "$dotfiles_dir/scripts/setup-agent-skills.sh"
-        log_success "Agent skills updated"
+    if [[ -f "$dotfiles_dir/scripts/sync-skills.sh" ]]; then
+        DOTFILES="$dotfiles_dir" bash "$dotfiles_dir/scripts/sync-skills.sh" sync
+        DOTFILES="$dotfiles_dir" bash "$dotfiles_dir/scripts/sync-skills.sh" bootstrap
+        DOTFILES="$dotfiles_dir" bash "$dotfiles_dir/scripts/sync-skills.sh" --check
+        log_success "Agent skills synced (review 'git diff' before committing)"
     else
-        log_warning "setup-agent-skills.sh not found, skipping"
+        log_warning "sync-skills.sh not found, skipping"
     fi
 }
 
