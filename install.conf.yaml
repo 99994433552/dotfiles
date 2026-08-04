@@ -61,6 +61,10 @@
     # Claude Code personal instructions
     ~/.claude/CLAUDE.md: CLAUDE.md
     ~/.claude/rules: .claude/rules
+    ~/.claude/skills:
+      path: .claude/skills
+      force: true
+    ~/.claude/hooks: .claude/hooks
 
 # ============================================================================
 # SYMLINKS - Application configurations (.config)
