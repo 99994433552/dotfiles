@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # PostToolUse: format the just-edited file. Format only — never --fix.
-# Guarded and non-blocking: a missing formatter warns via stderr, exits 0.
+# Guarded and non-blocking: a missing formatter is silently skipped; always exits 0.
 set -uo pipefail
 
 file=$(jq -r '.tool_input.file_path // empty' 2>/dev/null)

@@ -48,10 +48,14 @@ check_one() {
   ref=$(jq  -r --arg n "$name" '.vendored[$n].ref'  "$MANIFEST")
   url="https://github.com/$repo"
   head_sha=$(git ls-remote "$url" HEAD | awk '{print $1}')
+  # `awk 'NR==1'` (not `head -1`) drains the whole pipe: head closing early
+  # would SIGPIPE the upstream git ls-remote and, under pipefail, abort
+  # --check on repos with large tag lists. A real ls-remote failure still
+  # propagates (git is the unguarded leftmost stage).
   latest_tag=$(git ls-remote --tags --sort=-v:refname "$url" \
                  | awk -F/ '{print $NF}' \
                  | { grep -v '\^{}' || true; } \
-                 | head -1)
+                 | awk 'NR==1')
   if [ "$ref" = "$head_sha" ] || { [ -n "$latest_tag" ] && [ "$ref" = "$latest_tag" ]; }; then
     ok "$name up to date (pinned $ref)"
   else
