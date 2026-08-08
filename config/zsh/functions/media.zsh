@@ -6,6 +6,7 @@
 ydl() {
   local output_format="%(title)s.%(ext)s"
   local check_cert=true
+  local recode=false
 
   while [[ "$1" == -* ]]; do
     case "$1" in
@@ -15,6 +16,9 @@ ydl() {
       --no-check)
         check_cert=false
         shift ;;
+      --recode)
+        recode=true
+        shift ;;
       *) break ;;
     esac
   done
@@ -22,12 +26,22 @@ ydl() {
   local cert_flag=""
   [[ "$check_cert" == false ]] && cert_flag="--no-check-certificate"
 
+  # By default just remux the already-mp4 streams (fast, lossless). Opt into a
+  # full libx264 re-encode with --recode only when a downstream tool needs it;
+  # re-encoding YouTube's H.264 costs CPU and loses quality for no gain.
+  local recode_args=()
+  if [[ "$recode" == true ]]; then
+    recode_args=(
+      --recode-video mp4
+      --postprocessor-args 'ffmpeg:-c:v libx264 -preset fast -crf 18 -c:a aac'
+    )
+  fi
+
   noglob yt-dlp $cert_flag \
     -o "$output_format" \
     -f 'bestvideo[ext=mp4][vcodec^=avc]+bestaudio[ext=m4a]/best[ext=mp4]/best' \
     --merge-output-format mp4 \
-    --recode-video mp4 \
-    --postprocessor-args 'ffmpeg:-c:v libx264 -preset fast -crf 18 -c:a aac' \
+    "${recode_args[@]}" \
     --concurrent-fragments 16 \
     --downloader aria2c \
     --downloader-args 'aria2c:--min-split-size=1M --max-connection-per-server=16 --max-concurrent-downloads=16 --split=16' \
