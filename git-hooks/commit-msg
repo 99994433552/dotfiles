@@ -44,7 +44,11 @@ if [ ${#first_line} -gt 72 ]; then
 fi
 
 # 3. Check for empty first line
-if [ -z "$(echo "$first_line" | xargs)" ]; then
+# Not `xargs`: it parses quotes as well as trimming, so a subject ending in an
+# apostrophe ("... read the machine's") dies on an unterminated quote, returns
+# nothing, and gets rejected as empty. Ask directly whether any non-whitespace
+# character is present.
+if ! printf '%s' "$first_line" | grep -q '[^[:space:]]'; then
     echo -e "${RED}❌ COMMIT REJECTED: Empty commit message${NC}"
     exit 1
 fi
