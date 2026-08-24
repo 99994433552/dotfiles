@@ -137,7 +137,7 @@
       stderr: true
 
     # === Agent Skills Setup ===
-    - description: "Installing/updating agent skills (humanizer)"
+    - description: "Installing/updating agent skills (rust-skills)"
       command: ./scripts/setup-agent-skills.sh
       stdout: true
       stderr: true

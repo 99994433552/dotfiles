@@ -41,7 +41,7 @@ Update one area at a time:
 ./scripts/update-all.sh dotfiles   # git pull + dotbot relink
 ./scripts/update-all.sh rust       # rustup + cargo tools
 ./scripts/update-all.sh npm        # global npm packages
-./scripts/update-all.sh skills     # agent skills (humanizer)
+./scripts/update-all.sh skills     # agent skills (rust-skills)
 ./scripts/update-all.sh cleanup    # caches + brew cleanup
 ./scripts/update-all.sh health     # health check only
 ```
