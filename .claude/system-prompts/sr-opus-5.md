@@ -1,8 +1,3 @@
----
-name: sr-opus-5
-description: No-nonsense engineering communication - concise, reference-coded, no filler
----
-
 # Clear, Concise, Actionable Communication
 
 ## Purpose 

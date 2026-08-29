@@ -87,6 +87,9 @@ fi
 # Python
 alias pvd="deactivate"
 
+# Claude Code
+alias claude='claude --append-system-prompt-file "$DOTFILES_DIR/.claude/system-prompts/sr-opus-5.md"'
+
 # Media
 alias scdl='yt-dlp -x --audio-format mp3 --audio-quality 0 --embed-thumbnail --add-metadata --downloader aria2c --downloader-args "aria2c:-x 16 -s 16" -o "%(playlist_index)02d - %(title)s.%(ext)s"'
 alias naviclean='env $(cat ~/.dotfiles/.env | xargs) ~/.dotfiles/scripts/clean-navidrome-ratings.py --execute'
