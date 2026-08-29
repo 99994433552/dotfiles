@@ -329,6 +329,93 @@ update-all.sh  # Includes health check at the end
 
 ---
 
+## Claude Code
+
+### claude-statusline.sh
+
+Renders the status line at the bottom of a Claude Code session.
+
+**Location:** `~/.dotfiles/scripts/claude-statusline.sh`
+**Symlinked to:** `~/.claude/statusline-command.sh` (wired up in `install.conf.yaml`)
+**Configured by:** the `statusLine` key in `.claude/settings.json`
+
+**Output:**
+
+```
+ ~/.dotfiles   main ●   auto  ▐██░░░░░░░░ 168k/1M  5h 31% (2h) · 7d 59% (3d)   Opus 5 · high
+```
+
+Directory, git branch with a `●` when the tree is dirty, permission mode, how
+full the context window is, the two plan rate limits, then the model and its
+effort level. Every percentage turns yellow past 50% and red past 75%.
+
+`5h` is the rolling session limit and `7d` the weekly one — Claude Code has no
+daily limit. The parenthetical is the time left until that window resets,
+rounded down to one unit, so `2h` means at least two hours remain.
+
+The context window sits ahead of the model on purpose. A single-line status line
+is truncated from the right, and the model is the part worth losing first.
+
+**How it gets its data:**
+
+Claude Code pipes a JSON snapshot of the session on stdin on every change,
+debounced to roughly 300ms. Everything shown comes out of that payload in one
+`jq` pass: `context_window`, `permission_mode`, `model.display_name`,
+`effort.level`, `rate_limits` and the workspace directory. Nothing reads the
+transcript file, and nothing reads the stale `cachedUsageUtilization` block in
+`~/.claude.json`.
+
+`context_window.used_percentage` drives the bar, and
+`context_window.total_input_tokens` over `context_window.context_window_size`
+gives the numbers. Claude Code computes the percentage as
+`round(total_input_tokens / context_window_size * 100)`, so the bar and the
+numbers cannot disagree.
+
+Two field names in that payload are misleading. `total_input_tokens` is not a
+session total: it is the last message's `input_tokens + cache_creation +
+cache_read`, which is exactly what currently occupies the window. `total_output_tokens`
+is likewise just the last response. A cumulative figure for the session exists
+only in the transcript file, which this script does not read.
+
+`rate_limits.five_hour` and `rate_limits.seven_day` each carry a
+`used_percentage` and a `resets_at` timestamp. Claude Code only puts the key in
+the payload when one of the two is present, so the segment disappears on an API
+key, Bedrock or Vertex session, where plan limits do not apply.
+
+`resets_at` is a Unix epoch in the payloads this was checked against (Claude
+Code 2.1.236). The jq pass also accepts an ISO 8601 string, so a build that
+spells it `2026-08-27T15:00:00.902275+00:00` keeps working — a form neither
+`fromdateiso8601` nor BSD `date` will parse, so the pass strips the fractional
+seconds and folds the offset back in by hand. Either way the render stays a
+single `jq` call. An unparseable timestamp collapses to "no reset time known"
+and drops the parenthetical rather than shifting the fields that follow it.
+
+Sections disappear when the session does not report them. `effort` only appears
+on models that support it, and the git segment is skipped outside a repository.
+
+**Requirements:**
+- `jq`
+- A Nerd Font in the terminal. Without one the icons render as boxes; the text
+  stays readable.
+- Set `NO_COLOR` to drop the ANSI escapes.
+
+**Tests:**
+```bash
+shellspec --shell bash --default-path scripts/spec --helperdir scripts/spec
+```
+
+**Notes:**
+- Targets bash 3.2, the `/bin/bash` that macOS ships and the interpreter named
+  in `settings.json`.
+- Nerd Font icons are written as UTF-8 byte escapes (`$'\xee\x82\xa0'`). Their
+  Private Use Area codepoints do not survive every editor and transport, and
+  bash 3.2 has no `$'\uXXXX'`.
+- The `jq` fields are joined on U+001F, not a tab. `read` collapses runs of
+  whitespace delimiters and drops leading ones, so a tab-separated line shifts
+  every value left as soon as one field comes back empty.
+
+---
+
 ## Tmux Scripts
 
 ### Session Management

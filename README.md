@@ -77,11 +77,11 @@ The repo tracks:
 - `CLAUDE.md` — global instructions, kept lean since they load every session
 - `.claude/rules/` — topic rules; `git.md` always loads, `python.md` is path-scoped to `**/*.py` and loads only when you open a Python file
 - `.claude/settings.json` — permissions, enabled plugins, statusline; no hardcoded home paths
+- `scripts/claude-statusline.sh` — the status line: directory, branch, permission mode, context window as used over total, the 5-hour and weekly plan limits, and the model. Specs in `scripts/spec/` run with `shellspec --shell bash --default-path scripts/spec --helperdir scripts/spec`
 
 These stay local and never get committed:
 
 - `~/.claude/settings.local.json` — rules that need an absolute home path, such as the dotfiles push allow
-- `~/.claude/statusline-command.sh` — the statusline script
 
 Keep `settings.json` free of your username. `.gitignore` tracks it as an exception to `.claude/*`, and the pre-commit hook rejects any commit that contains a home path. Bash permission rules match literally with no `~` expansion, so home-relative rules belong in `settings.local.json`; statusline paths do expand `~`, so use it there.
 

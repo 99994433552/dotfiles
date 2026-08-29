@@ -65,6 +65,10 @@
       path: .claude/skills
       force: true
     ~/.claude/hooks: .claude/hooks
+    ~/.claude/output-styles: .claude/output-styles
+    ~/.claude/statusline-command.sh:
+      path: scripts/claude-statusline.sh
+      force: true
 
 # ============================================================================
 # SYMLINKS - Application configurations (.config)

@@ -26,26 +26,39 @@
     ],
     "deny": [
       "Read(./.env)",
-      "Read(./.env.*)",
       "Read(**/.env)",
-      "Read(**/.env.*)"
+      "Read(./.env.local)",
+      "Read(**/.env.local)",
+      "Read(./.env.*.local)",
+      "Read(**/.env.*.local)",
+      "Read(./.env.development)",
+      "Read(**/.env.development)",
+      "Read(./.env.production)",
+      "Read(**/.env.production)",
+      "Read(./.env.staging)",
+      "Read(**/.env.staging)",
+      "Read(./.env.test)",
+      "Read(**/.env.test)"
     ],
     "ask": [],
-    "defaultMode": "plan"
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "/bin/bash ~/.claude/statusline-command.sh"
+    "defaultMode": "auto"
   },
   "hooks": {
     "PostToolUse": [
       {
         "matcher": "Edit|Write|MultiEdit",
         "hooks": [
-          { "type": "command", "command": "~/.claude/hooks/format-dispatch.sh" }
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/format-dispatch.sh"
+          }
         ]
       }
     ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "/bin/bash ~/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
     "pyright-lsp@claude-plugins-official": true,
@@ -57,7 +70,7 @@
     "skill-creator@claude-plugins-official": true,
     "astral@astral-sh": true
   },
-  "outputStyle": "Explanatory",
+  "outputStyle": "sr-opus-5",
   "language": "Ukrainian",
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
@@ -67,5 +80,8 @@
   "autoDreamEnabled": true,
   "preferredNotifChannel": "kitty",
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "agentPushNotifEnabled": true,
+  "inputNeededNotifEnabled": true,
+  "remoteControlAtStartup": false
 }

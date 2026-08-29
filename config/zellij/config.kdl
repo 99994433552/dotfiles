@@ -309,6 +309,16 @@ web_client {
 // 
 // theme "dracula"
  
+// Theme to use when the host terminal reports a dark color palette.
+// Requires `theme_light` to also be set; otherwise `theme` is used.
+// 
+// theme_dark "dracula"
+ 
+// Theme to use when the host terminal reports a light color palette.
+// Requires `theme_dark` to also be set; otherwise `theme` is used.
+// 
+// theme_light "solarized-light"
+ 
 // Choose the base input mode of zellij.
 // Default: normal
 // 
@@ -528,7 +538,7 @@ scrollback_lines_to_serialize 10000
 // Whether to show tips on startup
 // Default: true
 // 
-// show_startup_tips false
+show_startup_tips false
  
 // Whether to show release notes on first version run
 // Default: true
